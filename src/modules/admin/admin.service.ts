@@ -2,7 +2,7 @@ import { AdminRepository } from "./admin.repository";
 
 export const AdminService = {
   getAllUsers: async (query: any) => {
-  return AdminRepository.getAllUsers(query);
+    return AdminRepository.getAllUsers(query);
   },
 
   getUserById: async (id: string) => {

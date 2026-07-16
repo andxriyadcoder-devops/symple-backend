@@ -52,11 +52,19 @@ export const AdminRepository = {
   },
 
   updateUserRole: async (id: string, role: string) => {
-    return User.findByIdAndUpdate(id, { role }, { new: true }).select("-password");
+    return User.findByIdAndUpdate(
+      id,
+      { role },
+      { new: true }
+    ).select("-password");
   },
 
   updateUserStatus: async (id: string, status: string) => {
-    return User.findByIdAndUpdate(id, { status }, { new: true }).select("-password");
+    return User.findByIdAndUpdate(
+      id,
+      { status },
+      { new: true }
+    ).select("-password");
   },
 
   getDashboardStats: async () => {
@@ -72,7 +80,9 @@ export const AdminRepository = {
       User.countDocuments(),
       User.countDocuments({ status: UserStatus.ACTIVE }),
       User.countDocuments({ status: UserStatus.BLOCKED }),
-      User.countDocuments({ role: UserRole.ADMIN }),
+      User.countDocuments({
+        role: { $in: [UserRole.ADMIN, UserRole.SUPER_ADMIN] },
+      }),
       Wallet.countDocuments(),
       Transaction.countDocuments(),
       Wallet.aggregate([
@@ -93,10 +103,8 @@ export const AdminRepository = {
       totalAdmins,
       totalWallets,
       totalTransactions,
-      totalCoinBalance:
-        walletStats.length > 0 ? walletStats[0].totalCoinBalance : 0,
-      totalCashBalance:
-        walletStats.length > 0 ? walletStats[0].totalCashBalance : 0,
+      totalCoinBalance: walletStats[0]?.totalCoinBalance || 0,
+      totalCashBalance: walletStats[0]?.totalCashBalance || 0,
     };
   },
 };

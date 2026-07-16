@@ -5,13 +5,10 @@ import { UserRole } from "@/shared/enums";
 
 const router = Router();
 
-// Only SUPER_ADMIN can access all admin routes
 router.use(auth(UserRole.SUPER_ADMIN));
 
-// Dashboard
-router.get("/dashboard", AdminController.getDashboard);
+router.get("/dashboard", AdminController.getDashboardStats);
 
-// Users
 router.get("/users", AdminController.getAllUsers);
 
 router.get("/users/:id", AdminController.getUserById);

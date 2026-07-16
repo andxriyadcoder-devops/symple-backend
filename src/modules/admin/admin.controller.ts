@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { AdminService } from "./admin.service";
 
 export const AdminController = {
-  getDashboard: async (_req: Request, res: Response) => {
+  getDashboardStats: async (_req: Request, res: Response) => {
     const stats = await AdminService.getDashboardStats();
 
     res.status(200).json({
@@ -11,8 +11,8 @@ export const AdminController = {
     });
   },
 
-  getAllUsers: async (_req: Request, res: Response) => {
-    const users = await AdminService.getAllUsers(_req.query);
+  getAllUsers: async (req: Request, res: Response) => {
+    const users = await AdminService.getAllUsers(req.query);
 
     res.status(200).json({
       success: true,
