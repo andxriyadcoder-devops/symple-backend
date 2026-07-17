@@ -52,6 +52,9 @@ export class WalletService {
     return this.repository.update(id, data);
   }
   async addCoin(walletId: string, amount: number) {
+    console.log("Wallet ID:", walletId);
+    console.log("Amount:", amount);
+    console.log("Type:", typeof amount);
   return this.repository.addCoin(walletId, amount);
   }
   async getWalletById(id: string) {
@@ -155,6 +158,57 @@ export class WalletService {
     amount,
     status: 'PENDING',
   };
+  }
+    async getAllWallets() {
+    return this.repository.getAllWallets();
+  }
+
+  async adminAddCoin(userId: string, amount: number) {
+    const wallet = await this.getWalletByUserObjectId(userId);
+
+    if (!wallet) {
+      throw new AppError("Wallet not found", 404);
+    }
+
+    return this.repository.addCoin(wallet._id.toString(), amount);
+  }
+
+  async adminDeductCoin(userId: string, amount: number) {
+    const wallet = await this.getWalletByUserObjectId(userId);
+
+    if (!wallet) {
+      throw new AppError("Wallet not found", 404);
+    }
+
+    if (wallet.coinBalance < amount) {
+      throw new AppError("Insufficient balance", 400);
+    }
+
+    return this.repository.removeCoin(wallet._id.toString(), amount);
+  }
+
+  async adminAddCash(userId: string, amount: number) {
+    const wallet = await this.getWalletByUserObjectId(userId);
+
+    if (!wallet) {
+      throw new AppError("Wallet not found", 404);
+    }
+
+    return this.repository.addCash(wallet._id.toString(), amount);
+  }
+
+  async adminDeductCash(userId: string, amount: number) {
+    const wallet = await this.getWalletByUserObjectId(userId);
+
+    if (!wallet) {
+      throw new AppError("Wallet not found", 404);
+    }
+
+    if (wallet.cashBalance < amount) {
+      throw new AppError("Insufficient cash balance", 400);
+    }
+
+    return this.repository.removeCash(wallet._id.toString(), amount);
   }
 
 }
