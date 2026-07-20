@@ -2,6 +2,7 @@ import { Response } from "express";
 
 import transactionService from "./transaction.service";
 import { AuthRequest } from "@/middleware/auth";
+import { sendResponse } from "@/shared/utils";
 
 export class TransactionController {
   async myTransactions(req: AuthRequest, res: Response) {
@@ -9,8 +10,10 @@ export class TransactionController {
       req.user!.id,
     );
 
-    return res.status(200).json({
+    return sendResponse(res, {
       success: true,
+      statusCode: 200,
+      message: "Transactions fetched successfully",
       data: transactions,
     });
   }

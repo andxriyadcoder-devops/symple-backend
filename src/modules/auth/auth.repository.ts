@@ -5,6 +5,9 @@ export class AuthRepository {
   async findByEmail(email: string) {
     return User.findOne({ email });
   }
+  async findById(id: string) {
+    return User.findById(id).select("-password");
+  }
 
   async findByUsername(username: string) {
     return User.findOne({ username });

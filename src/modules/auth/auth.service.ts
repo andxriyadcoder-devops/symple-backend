@@ -212,6 +212,15 @@ export class AuthService {
       user: safeUser,
     };
   }
+  async me(id: string) {
+  const user = await this.repository.findById(id);
+
+  if (!user) {
+    throw new AppError("User not found", 404);
+  }
+
+  return user;
+  }
 }
 
 export default new AuthService();
