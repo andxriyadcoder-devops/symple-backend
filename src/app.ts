@@ -6,6 +6,11 @@ import cookieParser from 'cookie-parser';
 
 import routes from './routes/index';
 import { errorHandler } from './middleware/errorHandler';
+import { rateLimiter } from "./middleware/security/rateLimiter";
+import mongoSanitize from "express-mongo-sanitize";
+import compression from "compression";
+import hpp from "hpp";
+
 
 const app = express();
 
@@ -13,7 +18,15 @@ app.use(helmet());
 
 app.use(cors());
 
+app.use(rateLimiter);
+
+app.use(mongoSanitize());
+
+app.use(hpp());
+
 app.use(morgan('dev'));
+
+app.use(compression());
 
 app.use(express.json());
 
