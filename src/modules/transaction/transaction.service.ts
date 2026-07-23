@@ -124,6 +124,39 @@ export class TransactionService {
   async getAllWithdrawRequests() {
   return this.repository.getAllWithdrawRequests();
   }
+  async approveWithdraw(id: string) {
+  const transaction = await this.repository.findById(id);
+
+  if (!transaction) {
+    throw new AppError("Withdraw request not found", 404);
+  }
+
+  if (transaction.status !== TransactionStatus.PENDING) {
+    throw new AppError("Withdraw request already processed", 400);
+  }
+
+  return this.repository.updateStatus(
+    id,
+    TransactionStatus.SUCCESS
+  );
+}
+
+async rejectWithdraw(id: string) {
+  const transaction = await this.repository.findById(id);
+
+  if (!transaction) {
+    throw new AppError("Withdraw request not found", 404);
+  }
+
+  if (transaction.status !== TransactionStatus.PENDING) {
+    throw new AppError("Withdraw request already processed", 400);
+  }
+
+  return this.repository.updateStatus(
+    id,
+    TransactionStatus.CANCELLED
+  );
+  }
 }
 
 export default new TransactionService();

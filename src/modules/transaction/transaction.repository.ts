@@ -39,14 +39,27 @@ export class TransactionRepository {
       },
     });
   }
+
   async getAllWithdrawRequests() {
-  return Transaction.find({
-    type: TransactionType.WITHDRAW_REQUEST,
-  })
-    .populate("userId", "fullName username email")
-    .sort({
-      createdAt: -1,
-    });
+    return Transaction.find({
+      type: TransactionType.WITHDRAW_REQUEST,
+    })
+      .populate("userId", "fullName username email")
+      .sort({
+        createdAt: -1,
+      });
+  }
+
+  async findById(id: string) {
+    return Transaction.findById(id);
+  }
+
+  async updateStatus(id: string, status: string) {
+    return Transaction.findByIdAndUpdate(
+      id,
+      { status },
+      { new: true }
+    );
   }
 }
 
